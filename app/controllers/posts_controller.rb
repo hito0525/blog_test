@@ -21,6 +21,15 @@ end
     @post.update_attributes(post_params)
     redirect_to "/posts/#{@post.id}"
   end
+  def destroy
+    @post = Post.find(params[:id])
+    @post.destroy
+    redirect_to "/"
+  end
+
+
+
+
 
 
 private
