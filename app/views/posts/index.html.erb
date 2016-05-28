@@ -9,3 +9,51 @@
 <p><%= image_tag @author.image_url, width: 200 %></p>
 <p>運営 : <%= @author.name %></p>
 <p>一言 : <%= @author.description %></p>
+<div id="map"></div>
+    <script>
+ function initMap() {
+        // GoogleMapの初期化
+        var map = new google.maps.Map(document.getElementById('map'), {
+          // デフォルトの座標（東京）
+          center: {lat: 35.6730185, lng: 139.4302008},
+          // 拡大度合い
+          zoom: 11
+        });
+        var infoWindow = new google.maps.InfoWindow({map: map});
+
+        // 現在地の取得が可能か調べる（ブラウザの種類によっては取れない）
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          // 現在地の取得（ブラウザの設定よっては取れない）
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            // 座標指定
+            infoWindow.setPosition(pos);
+            // 指定座標にコンテンツ（メッセージ表示）
+            infoWindow.setContent('ここにいるよ！');
+            // 指定座標を真ん中に表示
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      }
+    </script>
+    <!-- ↓は自分のKeyに変更すること -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGWZyPqMmm8gW6K-7bn4FKkst0nkTl54I&callback=initMap">
+    </script>
